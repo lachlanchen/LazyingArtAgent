@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "properties": {
+    "task_summary": { "type": "string" },
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "goal": { "type": "string" },
+          "verification": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "validation": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "depends_on": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["id", "title", "goal", "verification", "validation"],
+        "additionalProperties": false
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "out_of_scope": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["task_summary", "assumptions", "steps", "risks", "out_of_scope"],
+  "additionalProperties": false
+}
