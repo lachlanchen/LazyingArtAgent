@@ -1,52 +1,66 @@
 [English](../README.md) · [العربية](README.ar.md) · [Español](README.es.md) · [Français](README.fr.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [中文 (简体)](README.zh-Hans.md) · [中文（繁體）](README.zh-Hant.md) · [Deutsch](README.de.md) · [Русский](README.ru.md)
 
 
-# Codex Exec Helpers (LazyingArtAgent)
+[![LazyingArt banner](https://github.com/lachlanchen/lachlanchen/raw/main/figs/banner.png)](https://github.com/lachlanchen/lachlanchen/blob/main/figs/banner.png)
 
-![Node.js](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)
-![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)
-![Status](https://img.shields.io/badge/status-codex%20cli%20helpers-informational)
-![Codex SDK](https://img.shields.io/badge/@openai/codex--sdk-%5E0.98.0-10a37f)
+# 🧠 Trợ lý dòng lệnh Codex (LazyingArtAgent)
 
-> Các script này chạy `ls -la`, sau đó yêu cầu Codex phân tích danh sách đó.
+![Node.js](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white&style=for-the-badge)
+![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-codex%20cli%20helpers-informational?style=for-the-badge)
+![Codex SDK](https://img.shields.io/badge/@openai/codex--sdk-%5E0.98.0-10a37f?style=for-the-badge)
+![Language Stack](https://img.shields.io/badge/languages-Bash%20%2F%20TypeScript-0f766e?style=for-the-badge&logo=typescript&logoColor=white)
 
-## Tổng quan
+| 🎯 Mục tiêu | 🧰 Chi tiết |
+|---|---|
+| Liên tục phiên làm việc | Tiếp tục và duy trì phiên Codex qua các lần chạy |
+| Chất lượng đầu ra | Truyền sự kiện JSONL + xuất thông điệp cuối |
+| Hỗ trợ lập kế hoạch | Sinh bước công việc theo lược đồ được ràng buộc |
+| Môi trường | Shell cục bộ và quy trình làm việc thân thiện CI |
 
-Kho này cung cấp các tiện ích CLI thực dụng cho workflow dùng Codex:
-- Phân tích danh sách thư mục hiện tại bằng Codex qua Bash hoặc TypeScript.
-- Lưu và tiếp tục lại các phiên `codex exec` giữa nhiều lần chạy.
-- Chia tác vụ lớn thành các bước JSON nhỏ, có thể kiểm chứng, và được ràng buộc bằng schema.
+> Các tiện ích CLI thực tế cho quy trình Codex giúp giữ nguyên ngữ cảnh phiên và đảm bảo đầu ra có cấu trúc.
 
-Kho cũng bao gồm tầm nhìn sản phẩm ban đầu và ghi chú SDK cho một tác nhân phát triển rộng hơn dựa trên Codex.
+## 🎯 Tổng quan
 
-### Nhìn nhanh
+Repo này cung cấp bộ công cụ dòng lệnh nhỏ nhưng hữu ích cho quy trình làm việc dựa trên Codex:
+
+- Phân tích danh sách thư mục hiện tại với Codex.
+- Tiếp tục và tiếp nối các phiên Codex qua nhiều lần chạy.
+- Chia các nhiệm vụ lớn thành các bước có thể xác minh theo lược đồ.
+- Giữ tài liệu hướng dẫn sử dụng và ghi chú SDK của Codex cho các ý tưởng quy trình mới.
+
+Những công cụ này được thiết kế nhẹ và theo hướng script để bạn có thể chạy ở bất kỳ môi trường nào có `codex` và các công cụ runtime kèm theo.
+
+## 🚀 Năng lực nhanh
+
+### Tổng quan nhanh
 
 | Khu vực | Bạn nhận được gì |
 |---|---|
-| 🔁 Duy trì phiên làm việc | Tiếp tục phiên gần nhất, chỉ định session ID rõ ràng, hoặc dùng file phiên bền vững |
-| 📤 Xử lý đầu ra | Chế độ stream JSONL và xuất thông điệp cuối cùng |
-| 🧩 Lập kế hoạch có cấu trúc | Workflow tách tác vụ theo JSON schema |
-| 🛠️ Hai cách triển khai | Entry point Shell và TypeScript cho phân tích listing |
-| 📚 Ghi chú dự án | Tầm nhìn sản phẩm + ghi chú Codex SDK trong `docs/` |
+| 🔁 Liên tục phiên làm việc | Khôi phục phiên gần nhất, ID phiên rõ ràng hoặc tệp phiên liên tục |
+| 📤 Xử lý đầu ra | Phát luồng sự kiện JSONL và xuất thông điệp cuối |
+| 🧩 Lập kế hoạch có cấu trúc | Đầu ra chia nhiệm vụ theo ràng buộc lược đồ JSON |
+| 🛠️ Hai điểm vào | Triển khai Bash và TypeScript |
+| 📚 Ngữ cảnh nhúng | Hướng dẫn dự án trong `docs/` |
 
-## Tính năng
+### 🧩 Tính năng
 
-- Chạy Codex có nhận biết phiên:
+- Thực thi Codex có nhận biết phiên:
   - `--resume-last`
   - `--session <id>`
   - `--session-file <path>`
   - `--session-mode auto|new|resume`
 - Kiểm soát đầu ra:
-  - `--json` truyền thẳng luồng sự kiện JSONL
+  - `--json` truyền tiếp luồng sự kiện
   - `--output-last-message <path>`
-  - `--prompt <text>` tiền tố prompt tùy chỉnh
-- Script lập kế hoạch tác vụ có ép schema:
+  - `--prompt <text>` tiền tố prompt tuỳ chỉnh
+- Trình lập kế hoạch nhiệm vụ với ràng buộc lược đồ:
   - `--task` hoặc `--file`
-  - `--schema` ghi đè schema
-  - `--out` file đầu ra
-- Có cả entrypoint shell và TypeScript để phân tích listing.
+  - `--schema` ghi đè
+  - `--out` tệp đầu ra
+- Cả điểm vào shell và TypeScript cho phân tích listing.
 
-## Cấu trúc dự án
+## 🧱 Cấu trúc dự án
 
 ```text
 .
@@ -68,50 +82,45 @@ Kho cũng bao gồm tầm nhìn sản phẩm ban đầu và ghi chú SDK cho m�
    └─ codex/ (git submodule)
 ```
 
-## Hành vi phiên
+## ✅ Điều kiện tiên quyết
 
-`codex exec` sẽ bắt đầu một phiên không tương tác mới trừ khi bạn chủ động tiếp tục phiên cũ. Để tiếp tục phiên trước, dùng `codex exec resume --last` hoặc `codex exec resume <SESSION_ID>`. Bạn có thể tìm session ID qua bộ chọn tương tác `codex resume`, lệnh `/status` bên trong một phiên, hoặc trong `~/.codex/sessions/`.
-
-Các script này cũng hỗ trợ `--session-file <path>` để lưu session ID. Ở lần chạy đầu, script tạo phiên mới, lưu ID, rồi tái sử dụng ở các lần chạy sau.
-
-Bạn có thể điều khiển hành vi phiên bằng `--session-mode`:
-- `auto` (mặc định): tiếp tục nếu có session file, nếu không thì tạo phiên mới
-- `new`: luôn tạo phiên mới (ghi đè session file nếu có cung cấp)
-- `resume`: yêu cầu phải có phiên hiện có (từ `--session-file`, `--session`, hoặc `--resume-last`)
-
-## Điều kiện tiên quyết
-
-| Yêu cầu | Lý do cần thiết |
+| Yêu cầu | Vì sao cần |
 |---|---|
-| `codex` CLI trong `PATH` | Bắt buộc cho mọi script helper |
-| Ngữ cảnh kho Git (hoặc `--skip-git-check`) | Script có lớp bảo vệ để tránh chạy nhầm ngoài repo |
-| `python3` (hoặc `python`) cho `scripts/codex_analyze_ls.sh` | Cần để parse JSON khi khởi tạo/thu thập đầu ra phiên |
-| Node.js 18+ cho `scripts/codex_analyze_ls.ts` | Runtime khuyến nghị cho entrypoint TypeScript |
+| `codex` CLI trong `PATH` | Bắt buộc bởi mọi script trợ giúp |
+| Bối cảnh repository Git (hoặc `--skip-git-check`) | Các script tránh chạy nhầm trong môi trường không phải repo |
+| `python3` (hoặc `python`) cho `scripts/codex_analyze_ls.sh` | Cần để phân tích JSON khi khởi tạo/ghi lại đầu ra phiên |
+| Node.js 18+ cho `scripts/codex_analyze_ls.ts` | Runtime cho điểm vào TypeScript |
 
-## Cài đặt
+## 🔧 Cài đặt
 
 1. Clone repository.
-2. Cài dependencies của Node:
 
-```bash
-npm install
-```
+   ```bash
+   git clone <repository-url>
+   cd LazyingArtAgent
+   ```
 
-3. Đảm bảo `codex` CLI đã được cài và dùng được:
+2. Cài đặt dependencies Node.
 
-```bash
-codex --help
-```
+   ```bash
+   npm install
+   ```
 
-4. Tùy chọn: khởi tạo submodule nếu bạn muốn truy cập cục bộ `vendor/codex`:
+3. Kiểm tra Codex CLI đã sẵn sàng.
 
-```bash
-git submodule update --init --recursive
-```
+   ```bash
+   codex --help
+   ```
 
-Lưu ý: `.gitmodules` khai báo `vendor/codex`, nhưng trong một số bản checkout có thể chưa được khởi tạo.
+4. (Tuỳ chọn) khởi tạo submodule nếu cần `vendor/codex` tại máy local.
 
-## Cách dùng
+   ```bash
+   git submodule update --init --recursive
+   ```
+
+Giả định: `<repository-url>` là URL remote của bạn; hãy thay bằng origin thực tế.
+
+## 🛠️ Cách dùng
 
 ### Script Shell: Phân tích `ls -la`
 
@@ -134,27 +143,27 @@ scripts/codex_analyze_ls.sh --output-last-message out.txt
 scripts/codex_analyze_ls.sh --prompt "Summarize the listing"
 ```
 
-### Script Tách tác vụ
+### 🧭 Script phân tách nhiệm vụ
 
-Chia tác vụ lớn thành các bước nhỏ có thể kiểm chứng và xuất JSON:
+Tách một nhiệm vụ lớn thành các bước nhỏ, có thể xác minh và xuất JSON:
 
 ```bash
 scripts/codex_task_breakdown.sh --task "Build a login screen" --skip-git-check
 ```
 
-Dùng file tác vụ và lưu đầu ra:
+Dùng file nhiệm vụ và lưu đầu ra:
 
 ```bash
 scripts/codex_task_breakdown.sh --file docs/task.txt --out outputs/plan.json --skip-git-check
 ```
 
-Xác thực với đường dẫn schema tùy chỉnh:
+Xác thực với một đường dẫn lược đồ tuỳ chỉnh:
 
 ```bash
 scripts/codex_task_breakdown.sh --task "Refactor auth flow" --schema schemas/task_breakdown.schema.json --skip-git-check
 ```
 
-### Script Node TypeScript: Phân tích `ls -la`
+### ⚙️ Script Node TypeScript: Phân tích `ls -la`
 
 Chạy (với `tsx`):
 
@@ -175,7 +184,18 @@ npx tsx scripts/codex_analyze_ls.ts --output-last-message out.txt
 npx tsx scripts/codex_analyze_ls.ts --prompt "Summarize the listing"
 ```
 
-## Cấu hình
+## 🔁 Hành vi phiên
+
+`codex exec` bắt đầu phiên không tương tác mới nếu bạn không chủ động tiếp tục một phiên trước đó. Để tiếp tục phiên cũ, dùng `codex exec resume --last` hoặc `codex exec resume <SESSION_ID>`. Bạn có thể tìm ID phiên qua bộ chọn tương tác `codex resume`, lệnh `/status` trong phiên, hoặc tại `~/.codex/sessions/`.
+
+Các script này cũng hỗ trợ `--session-file <path>` để lưu trữ ID phiên. Lần chạy đầu tiên chúng bắt đầu một phiên mới, lưu ID, sau đó tái sử dụng ở các lần chạy tiếp theo.
+
+Bạn có thể kiểm soát hành vi phiên bằng `--session-mode`:
+- `auto` (mặc định): tiếp tục nếu tồn tại tệp phiên, nếu không thì bắt đầu phiên mới
+- `new`: luôn bắt đầu phiên mới (ghi đè tệp phiên nếu được cung cấp)
+- `resume`: yêu cầu một phiên hiện có (từ `--session-file`, `--session` hoặc `--resume-last`)
+
+## 🧭 Cấu hình
 
 ### `scripts/codex_analyze_ls.sh` và `scripts/codex_analyze_ls.ts`
 
@@ -183,37 +203,37 @@ npx tsx scripts/codex_analyze_ls.ts --prompt "Summarize the listing"
 |---|---|
 | `--resume-last` | Tiếp tục phiên exec gần nhất |
 | `--session <id>` | Tiếp tục một phiên exec cụ thể |
-| `--session-file <path>` | Lưu và tái sử dụng session ID |
-| `--session-mode <auto|new|resume>` | Chiến lược phiên tường minh |
-| `--skip-git-check` | Bỏ qua kiểm tra kho Git |
-| `--json` | Xuất sự kiện JSONL |
-| `--output-last-message <path>` | Ghi thông điệp trợ lý cuối cùng |
-| `--prompt <text>` | Tiền tố prompt tùy chỉnh trước listing được nối vào |
+| `--session-file <path>` | Lưu trữ và tái sử dụng một ID phiên |
+| `--session-mode <auto|new|resume>` | Chiến lược phiên rõ ràng |
+| `--skip-git-check` | Bỏ qua kiểm tra repository Git |
+| `--json` | Phát ra các sự kiện JSONL |
+| `--output-last-message <path>` | Ghi thông điệp trợ lý cuối |
+| `--prompt <text>` | Tiền tố prompt tuỳ chỉnh trước khi gắn thêm listing |
 
-Các quy tắc ràng buộc được cả hai script phân tích áp dụng:
-- `--resume-last` và `--session` loại trừ lẫn nhau.
+Các quy tắc ràng buộc được áp dụng bởi cả hai script phân tích:
+- `--resume-last` và `--session` không thể dùng đồng thời.
 - `--session-file` không thể kết hợp với `--resume-last` hoặc `--session`.
-- `--session-mode new` không thể kết hợp với cờ resume tường minh.
-- `--session-mode resume` yêu cầu `--session-file`, `--session`, hoặc `--resume-last`.
+- `--session-mode new` không thể kết hợp với các cờ tiếp tục rõ ràng.
+- `--session-mode resume` đòi hỏi `--session-file`, `--session` hoặc `--resume-last`.
 
 ### `scripts/codex_task_breakdown.sh`
 
 | Tùy chọn | Mô tả |
 |---|---|
-| `--task <text>` | Tác vụ inline |
-| `--file <path>` | Đọc nội dung tác vụ từ file |
-| `--schema <path>` | File schema (mặc định: `schemas/task_breakdown.schema.json`) |
-| `--out <path>` | Ghi JSON cuối cùng ra file |
-| `--skip-git-check` | Bỏ qua kiểm tra kho Git |
+| `--task <text>` | Nhiệm vụ inline |
+| `--file <path>` | Văn bản nhiệm vụ từ file |
+| `--schema <path>` | Tệp lược đồ (mặc định: `schemas/task_breakdown.schema.json`) |
+| `--out <path>` | Ghi JSON cuối cùng vào file |
+| `--skip-git-check` | Bỏ qua kiểm tra repository Git |
 
-Hình dạng schema (`schemas/task_breakdown.schema.json`):
-- Bắt buộc ở cấp cao nhất: `task_summary`, `assumptions`, `steps`, `risks`, `out_of_scope`
+Hình dạng lược đồ (`schemas/task_breakdown.schema.json`):
+- Bắt buộc cấp cao nhất: `task_summary`, `assumptions`, `steps`, `risks`, `out_of_scope`
 - Bắt buộc cho mỗi bước: `id`, `title`, `goal`, `verification`, `validation`
-- Tùy chọn cho mỗi bước: `depends_on`
+- Không bắt buộc cho mỗi bước: `depends_on`
 
-## Ví dụ
+## 📎 Ví dụ
 
-### Lưu và tái sử dụng một phiên qua nhiều lần chạy
+### Duy trì và tái sử dụng một phiên qua nhiều lần chạy
 
 ```bash
 scripts/codex_analyze_ls.sh --session-file .codex_session --skip-git-check
@@ -226,7 +246,7 @@ scripts/codex_analyze_ls.sh --session-file .codex_session --skip-git-check
 scripts/codex_analyze_ls.sh --output-last-message outputs/last.txt --skip-git-check
 ```
 
-### Tạo artifact JSON kế hoạch tác vụ
+### Tạo artifact JSON kế hoạch nhiệm vụ
 
 ```bash
 scripts/codex_task_breakdown.sh \
@@ -235,48 +255,15 @@ scripts/codex_task_breakdown.sh \
   --skip-git-check
 ```
 
-## Tài liệu
+## 📚 Tài liệu
 
-- `docs/idea.md`: tầm nhìn sản phẩm cho tác nhân phát triển ứng dụng chạy bằng Codex
+- `docs/idea.md`: tầm nhìn sản phẩm cho tác nhân phát triển ứng dụng chạy bởi Codex
 - `docs/codex-sdk.md`: ghi chú cài đặt và sử dụng Codex SDK
 
-## Ghi chú phát triển
 
-- Cả hai script phân tích đều gửi prompt tới `codex` qua stdin (`-`), giúp tránh lỗi shell-quoting.
-- Cả hai script đều in `Session ID: ...` ra stderr để không ảnh hưởng stdout.
-- Script shell dùng `python3` (hoặc `python`) để parse JSONL khi khởi tạo session file.
-- Nếu cần kiểm soát theo chương trình sâu hơn (threads, workflow có thể tiếp tục), hãy cân nhắc Codex SDK và lưu thread ID giữa các lần chạy.
-- `npx tsx ...` được ghi nhận để chạy script TypeScript; `tsx` hiện chưa được khai báo trong `package.json` (cài global hoặc chạy qua `npx`).
 
-## Khắc phục sự cố
+## ❤️ Support
 
-| Triệu chứng | Nguyên nhân có thể | Cách xử lý |
-|---|---|---|
-| `codex CLI not found in PATH` | Codex CLI chưa được cài hoặc không thể tìm thấy | Cài Codex CLI và kiểm tra bằng `codex --help`. |
-| `Not inside a Git repo` | Lớp bảo vệ của script đã chặn thực thi | Chạy bên trong repository hoặc thêm `--skip-git-check`. |
-| `Session file is empty or missing` với `--session-mode resume` | Chế độ resume yêu cầu nguồn ID đã tồn tại | Tạo/khởi tạo session file trước (ví dụ với `--session-mode auto` hoặc `--session-mode new`). |
-| `python3 or python is required` (đường dẫn script shell) | Thiếu Python để parse JSONL | Cài Python rồi thử lại. |
-| Lỗi `npx tsx` | Phụ thuộc runtime chưa có cục bộ | Dùng trực tiếp `npx tsx ...`, hoặc thêm `tsx` làm dev dependency cục bộ. |
-
-## Lộ trình
-
-- Thêm các file README đa ngôn ngữ được tạo trong `i18n/` và giữ đồng bộ điều hướng ngôn ngữ.
-- Thêm các alias npm script cho các luồng phổ biến (`analyze:sh`, `analyze:ts`, `plan:task`).
-- Thêm kiểm tra CI nhẹ cho lint shell script và ví dụ xác thực schema.
-- Mở rộng ví dụ task planner với template thực tế trong `docs/`.
-
-## Đóng góp
-
-Mọi đóng góp đều được chào đón.
-
-Quy trình được đề xuất:
-1. Tạo feature branch.
-2. Giữ thay đổi tập trung và đúng với thực tế repository.
-3. Cập nhật docs/ví dụ khi hành vi CLI thay đổi.
-4. Mở pull request mô tả thay đổi hành vi và các bước xác thực.
-
-## Giấy phép
-
-Metadata của package khai báo giấy phép `ISC` trong `package.json`.
-
-Lưu ý: tại thời điểm viết, bản checkout này chưa có file `LICENSE` độc lập.
+| Donate | PayPal | Stripe |
+| --- | --- | --- |
+| [![Donate](https://camo.githubusercontent.com/24a4914f0b42c6f435f9e101621f1e52535b02c225764b2f6cc99416926004b7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f446f6e6174652d4c617a79696e674172742d3045413545393f7374796c653d666f722d7468652d6261646765266c6f676f3d6b6f2d6669266c6f676f436f6c6f723d7768697465)](https://chat.lazying.art/donate) | [![PayPal](https://camo.githubusercontent.com/d0f57e8b016517a4b06961b24d0ca87d62fdba16e18bbdb6aba28e978dc0ea21/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f50617950616c2d526f6e677a686f754368656e2d3030343537433f7374796c653d666f722d7468652d6261646765266c6f676f3d70617970616c266c6f676f436f6c6f723d7768697465)](https://paypal.me/RongzhouChen) | [![Stripe](https://camo.githubusercontent.com/1152dfe04b6943afe3a8d2953676749603fb9f95e24088c92c97a01a897b4942/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5374726970652d446f6e6174652d3633354246463f7374796c653d666f722d7468652d6261646765266c6f676f3d737472697065266c6f676f436f6c6f723d7768697465)](https://buy.stripe.com/aFadR8gIaflgfQV6T4fw400) |

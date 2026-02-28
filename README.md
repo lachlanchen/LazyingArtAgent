@@ -1,35 +1,49 @@
 [English](README.md) · [العربية](i18n/README.ar.md) · [Español](i18n/README.es.md) · [Français](i18n/README.fr.md) · [日本語](i18n/README.ja.md) · [한국어](i18n/README.ko.md) · [Tiếng Việt](i18n/README.vi.md) · [中文 (简体)](i18n/README.zh-Hans.md) · [中文（繁體）](i18n/README.zh-Hant.md) · [Deutsch](i18n/README.de.md) · [Русский](i18n/README.ru.md)
 
 
-# Codex Exec Helpers (LazyingArtAgent)
+[![LazyingArt banner](https://github.com/lachlanchen/lachlanchen/raw/main/figs/banner.png)](https://github.com/lachlanchen/lachlanchen/blob/main/figs/banner.png)
 
-![Node.js](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)
-![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)
-![Status](https://img.shields.io/badge/status-codex%20cli%20helpers-informational)
-![Codex SDK](https://img.shields.io/badge/@openai/codex--sdk-%5E0.98.0-10a37f)
+# 🧠 Codex Exec Helpers (LazyingArtAgent)
 
-> These scripts run `ls -la`, then ask Codex to analyze the listing.
+![Node.js](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white&style=for-the-badge)
+![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-codex%20cli%20helpers-informational?style=for-the-badge)
+![Codex SDK](https://img.shields.io/badge/@openai/codex--sdk-%5E0.98.0-10a37f?style=for-the-badge)
+![Language Stack](https://img.shields.io/badge/languages-Bash%20%2F%20TypeScript-0f766e?style=for-the-badge&logo=typescript&logoColor=white)
 
-## Overview
+| 🎯 Focus | 🧰 Details |
+|---|---|
+| Session continuity | Resume and persist Codex sessions across runs |
+| Output quality | JSONL event passthrough + final message export |
+| Planning support | Schema-enforced task breakdown generation |
+| Environments | Local shells and CI-friendly workflows |
 
-This repository provides practical CLI helpers for Codex-driven workflows:
-- Analyze the current directory listing with Codex using either Bash or TypeScript.
-- Persist and resume Codex exec sessions across runs.
-- Break large tasks into small, verifiable JSON steps enforced by a schema.
+> Practical CLI helpers for Codex workflows that preserve session context and enforce structured outputs.
 
-The repository also contains early product vision and SDK notes for a broader Codex-powered development agent.
+## 🎯 Overview
+
+This repository provides small but practical command-line tooling for Codex-driven workflows:
+
+- Analyze the current directory listing with Codex.
+- Resume and continue Codex sessions across runs.
+- Break large tasks into schema-constrained, verifiable steps.
+- Keep usage guidance and SDK notes for evolving Codex workflow ideas.
+
+These tools are intentionally lightweight and intentionally script-first so you can run them from any environment where `codex` and the supporting runtime tools are available.
+
+## 🚀 Quick Capabilities
 
 ### At a Glance
 
 | Area | What you get |
 |---|---|
 | 🔁 Session continuity | Resume last session, explicit session IDs, or persistent session files |
-| 📤 Output handling | JSONL stream mode and final-message export |
-| 🧩 Structured planning | JSON schema-constrained task breakdown workflow |
-| 🛠️ Dual implementation | Shell and TypeScript entrypoints for listing analysis |
-| 📚 Project notes | Product vision + Codex SDK notes in `docs/` |
+| 📤 Output handling | JSONL event streaming and final message export |
+| 🧩 Structured planning | JSON schema-constrained task breakdown output |
+| 🛠️ Dual entrypoints | Bash and TypeScript implementations |
+| 📚 Embedded context | Project guidance in `docs/` |
 
-## Features
+### 🧩 Features
 
 - Session-aware Codex execution:
   - `--resume-last`
@@ -44,9 +58,9 @@ The repository also contains early product vision and SDK notes for a broader Co
   - `--task` or `--file`
   - `--schema` override
   - `--out` output file
-- Both shell and TypeScript entrypoints for listing analysis.
+- Both shell and TypeScript entry points for listing analysis.
 
-## Project Structure
+## 🧱 Project Structure
 
 ```text
 .
@@ -66,52 +80,46 @@ The repository also contains early product vision and SDK notes for a broader Co
 ├─ i18n/
 └─ vendor/
    └─ codex/ (git submodule)
-```
-
-## Session Behavior
-
-`codex exec` starts a new non-interactive session unless you explicitly resume one. To continue a prior session, use `codex exec resume --last` or `codex exec resume <SESSION_ID>`. You can find session IDs via the interactive `codex resume` picker, the `/status` command inside a session, or in `~/.codex/sessions/`.
-
-These scripts also support `--session-file <path>` to persist the session ID. On first run, they start a new session, save the ID, then reuse it on subsequent runs.
-
-You can control session behavior with `--session-mode`:
-- `auto` (default): resume if a session file exists, otherwise start a new session
-- `new`: always start a new session (overwrites the session file if provided)
-- `resume`: require an existing session (from `--session-file`, `--session`, or `--resume-last`)
-
-## Prerequisites
+``n
+## ✅ Prerequisites
 
 | Requirement | Why it is needed |
 |---|---|
 | `codex` CLI in `PATH` | Required by all helper scripts |
 | Git repository context (or `--skip-git-check`) | Scripts guard against accidental non-repo execution |
 | `python3` (or `python`) for `scripts/codex_analyze_ls.sh` | Needed for JSON parsing when initializing/capturing session output |
-| Node.js 18+ for `scripts/codex_analyze_ls.ts` | Recommended runtime for the TypeScript entrypoint |
+| Node.js 18+ for `scripts/codex_analyze_ls.ts` | Runtime for the TypeScript entry point |
 
-## Installation
+## 🔧 Installation
 
 1. Clone the repository.
-2. Install Node dependencies:
 
-```bash
-npm install
-```
+   ```bash
+   git clone <repository-url>
+   cd LazyingArtAgent
+   ```
 
-3. Ensure `codex` CLI is installed and available:
+2. Install Node dependencies.
 
-```bash
-codex --help
-```
+   ```bash
+   npm install
+   ```
 
-4. Optional: initialize submodules if you want local access to `vendor/codex`:
+3. Verify the Codex CLI is available.
 
-```bash
-git submodule update --init --recursive
-```
+   ```bash
+   codex --help
+   ```
 
-Note: `.gitmodules` declares `vendor/codex`, but it may be uninitialized in some checkouts.
+4. (Optional) initialize submodules if you need `vendor/codex` locally.
 
-## Usage
+   ```bash
+   git submodule update --init --recursive
+   ```
+
+Assumption: `<repository-url>` is your Git remote URL; update this with your actual origin.
+
+## 🛠️ Usage
 
 ### Shell Script: Analyze `ls -la`
 
@@ -134,7 +142,7 @@ scripts/codex_analyze_ls.sh --output-last-message out.txt
 scripts/codex_analyze_ls.sh --prompt "Summarize the listing"
 ```
 
-### Task Breakdown Script
+### 🧭 Task Breakdown Script
 
 Split a large task into small, verifiable steps and output JSON:
 
@@ -154,7 +162,7 @@ Validate with a custom schema path:
 scripts/codex_task_breakdown.sh --task "Refactor auth flow" --schema schemas/task_breakdown.schema.json --skip-git-check
 ```
 
-### Node TypeScript Script: Analyze `ls -la`
+### ⚙️ Node TypeScript Script: Analyze `ls -la`
 
 Run (with `tsx`):
 
@@ -175,7 +183,18 @@ npx tsx scripts/codex_analyze_ls.ts --output-last-message out.txt
 npx tsx scripts/codex_analyze_ls.ts --prompt "Summarize the listing"
 ```
 
-## Configuration
+## 🔁 Session Behavior
+
+`codex exec` starts a new non-interactive session unless you explicitly resume one. To continue a prior session, use `codex exec resume --last` or `codex exec resume <SESSION_ID>`. You can find session IDs via the interactive `codex resume` picker, the `/status` command inside a session, or in `~/.codex/sessions/`.
+
+These scripts also support `--session-file <path>` to persist the session ID. On first run, they start a new session, save the ID, then reuse it on subsequent runs.
+
+You can control session behavior with `--session-mode`:
+- `auto` (default): resume if a session file exists, otherwise start a new session
+- `new`: always start a new session (overwrites the session file if provided)
+- `resume`: require an existing session (from `--session-file`, `--session`, or `--resume-last`)
+
+## 🧭 Configuration
 
 ### `scripts/codex_analyze_ls.sh` and `scripts/codex_analyze_ls.ts`
 
@@ -211,7 +230,7 @@ Schema shape (`schemas/task_breakdown.schema.json`):
 - Per-step required: `id`, `title`, `goal`, `verification`, `validation`
 - Optional per-step: `depends_on`
 
-## Examples
+## 📎 Examples
 
 ### Persist and reuse a session across runs
 
@@ -235,37 +254,37 @@ scripts/codex_task_breakdown.sh \
   --skip-git-check
 ```
 
-## Docs
+## 📚 Docs
 
 - `docs/idea.md`: product vision for the Codex-powered app development agent
 - `docs/codex-sdk.md`: Codex SDK install and usage notes
 
-## Development Notes
+## 🧪 Development Notes
 
-- Both analyze scripts send the prompt to `codex` via stdin (`-`), which avoids shell-quoting issues.
-- Both scripts print `Session ID: ...` to stderr so it doesn't interfere with stdout.
-- The shell script uses `python3` (or `python`) to parse JSONL when initializing a session file.
-- For deeper programmatic control (threads, resumable workflows), consider the Codex SDK and store the thread ID between runs.
-- `npx tsx ...` is documented for running the TypeScript script; `tsx` is not currently declared in `package.json` (install it globally or run via `npx`).
+- Both analyze scripts send the Codex prompt to `codex` via stdin (`-`) to avoid shell-quoting edge cases.
+- Both scripts print `Session ID: ...` to `stderr` so it does not interfere with parseable `stdout` output.
+- The shell script uses `python3` (or `python`) to parse JSONL when initializing or saving session state.
+- For deeper programmatic control (thread persistence, resume workflows), consider the Codex SDK notes in `docs/codex-sdk.md`.
+- `npx tsx ...` is documented for running the TypeScript script; `tsx` is not currently declared as a direct dependency in `package.json`.
 
-## Troubleshooting
+## 🧯 Troubleshooting
 
 | Symptom | Likely cause | Resolution |
 |---|---|---|
-| `codex CLI not found in PATH` | Codex CLI is not installed or not discoverable | Install the Codex CLI and verify with `codex --help`. |
+| `codex CLI not found in PATH` | `codex` is not installed or not discoverable | Install Codex CLI and verify with `codex --help`. |
 | `Not inside a Git repo` | Script guard blocked execution | Run inside a repository or pass `--skip-git-check`. |
 | `Session file is empty or missing` with `--session-mode resume` | Resume mode requires an existing ID source | Create/seed the session file first (for example with `--session-mode auto` or `--session-mode new`). |
-| `python3 or python is required` (shell script path) | Python missing for JSONL parsing | Install Python and retry. |
-| `npx tsx` issues | Runtime dependency not available locally | Use `npx tsx ...` directly, or add `tsx` as a dev dependency locally. |
+| `python3 or python is required` | Shell script path depends on Python parsing | Install Python and retry. |
+| `npx tsx` issues | Runtime dependency missing locally | Run `npx tsx ...` directly, or add `tsx` as a dev dependency locally. |
 
-## Roadmap
+## 🗺️ Roadmap
 
 - Add generated multilingual README files under `i18n/` and keep language navigation synchronized.
 - Add npm script aliases for common flows (`analyze:sh`, `analyze:ts`, `plan:task`).
-- Add lightweight CI checks for shell script linting and schema validation examples.
-- Expand task planner examples with real-world templates in `docs/`.
+- Add lightweight CI checks for shell script linting and schema validation.
+- Expand task-planner examples with real-world templates in `docs/`.
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome.
 
@@ -274,6 +293,12 @@ Suggested workflow:
 2. Keep changes focused and repository-accurate.
 3. Update docs/examples when CLI behavior changes.
 4. Open a pull request describing behavior changes and validation steps.
+
+## ❤️ Support
+
+| Donate | PayPal | Stripe |
+| --- | --- | --- |
+| [![Donate](https://camo.githubusercontent.com/24a4914f0b42c6f435f9e101621f1e52535b02c225764b2f6cc99416926004b7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f446f6e6174652d4c617a79696e674172742d3045413545393f7374796c653d666f722d7468652d6261646765266c6f676f3d6b6f2d6669266c6f676f436f6c6f723d7768697465)](https://chat.lazying.art/donate) | [![PayPal](https://camo.githubusercontent.com/d0f57e8b016517a4b06961b24d0ca87d62fdba16e18bbdb6aba28e978dc0ea21/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f50617950616c2d526f6e677a686f754368656e2d3030343537433f7374796c653d666f722d7468652d6261646765266c6f676f3d70617970616c266c6f676f436f6c6f723d7768697465)](https://paypal.me/RongzhouChen) | [![Stripe](https://camo.githubusercontent.com/1152dfe04b6943afe3a8d2953676749603fb9f95e24088c92c97a01a897b4942/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5374726970652d446f6e6174652d3633354246463f7374796c653d666f722d7468652d6261646765266c6f676f3d737472697065266c6f676f436f6c6f723d7768697465)](https://buy.stripe.com/aFadR8gIaflgfQV6T4fw400) |
 
 ## License
 

@@ -1,52 +1,66 @@
 [English](../README.md) · [العربية](README.ar.md) · [Español](README.es.md) · [Français](README.fr.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [中文 (简体)](README.zh-Hans.md) · [中文（繁體）](README.zh-Hant.md) · [Deutsch](README.de.md) · [Русский](README.ru.md)
 
 
-# مساعدات Codex Exec (LazyingArtAgent)
+[![LazyingArt banner](https://github.com/lachlanchen/lachlanchen/raw/main/figs/banner.png)](https://github.com/lachlanchen/lachlanchen/blob/main/figs/banner.png)
 
-![Node.js](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)
-![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)
-![Status](https://img.shields.io/badge/status-codex%20cli%20helpers-informational)
-![Codex SDK](https://img.shields.io/badge/@openai/codex--sdk-%5E0.98.0-10a37f)
+# 🧠 مساعدات سطر أوامر Codex (LazyingArtAgent)
 
-> تقوم هذه السكربتات بتشغيل `ls -la`، ثم تطلب من Codex تحليل الناتج.
+![Node.js](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white&style=for-the-badge)
+![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-codex%20cli%20helpers-informational?style=for-the-badge)
+![Codex SDK](https://img.shields.io/badge/@openai/codex--sdk-%5E0.98.0-10a37f?style=for-the-badge)
+![Language Stack](https://img.shields.io/badge/languages-Bash%20%2F%20TypeScript-0f766e?style=for-the-badge&logo=typescript&logoColor=white)
 
-## نظرة عامة
+| 🎯 التركيز | 🧰 التفاصيل |
+|---|---|
+| استمرارية الجلسة | استئناف جلسات Codex والحفاظ عليها بين التنفيذات |
+| جودة المخرجات | تمرير أحداث JSONL + تصدير الرسالة النهائية |
+| دعم التخطيط | توليد خطوات مخططة بقاعدة مخطط (schema) للتحقق |
+| البيئات | أوامر محلية وسير عمل مناسب لـ CI |
 
-يوفّر هذا المستودع مساعدات CLI عملية لتدفقات عمل تعتمد على Codex:
-- تحليل عرض الدليل الحالي باستخدام Codex عبر Bash أو TypeScript.
-- حفظ جلسات Codex exec واستئنافها بين التشغيلات.
-- تقسيم المهام الكبيرة إلى خطوات JSON صغيرة قابلة للتحقق مع فرض مخطط (schema).
+> أدوات CLI عملية لسير عمل Codex تحافظ على سياق الجلسة وتفرض مخرجات منظمة.
 
-يحتوي المستودع أيضًا على رؤية مبكرة للمنتج وملاحظات SDK لمساعد تطوير أوسع يعمل بواسطة Codex.
+## 🎯 نظرة عامة
 
-### لمحة سريعة
+يوفر هذا المستودع أدوات سطر أوامر عملية وخفيفة لسير عمل مبني على Codex:
+
+- تحليل قائمة الملفات في الدليل الحالي باستخدام Codex.
+- استئناف جلسات Codex ومواصلة العمل عبر تنفيذات متعددة.
+- تقسيم المهام الكبيرة إلى خطوات قابلة للتحقق ومقيدة بمخطط.
+- الاحتفاظ بإرشادات الاستخدام وملاحظات SDK لفكرة سير عمل Codex المتطورة.
+
+هذه الأدوات خفيفة الوزن وبشكل مقصود تعتمد على النصوص البرمجية، بحيث يمكنك تشغيلها من أي بيئة تتوفر فيها أداة `codex` والأدوات المساعدة المطلوبة.
+
+## 🚀 القدرات السريعة
+
+### نظرة سريعة
 
 | المجال | ما الذي تحصل عليه |
 |---|---|
-| 🔁 استمرارية الجلسة | استئناف آخر جلسة، ومعرّفات جلسات صريحة، أو ملفات جلسات دائمة |
-| 📤 التعامل مع المخرجات | وضع تدفق JSONL وتصدير الرسالة النهائية |
-| 🧩 تخطيط منظم | سير عمل تقسيم مهام مقيّد بمخطط JSON |
-| 🛠️ تنفيذ مزدوج | نقاط دخول Shell وTypeScript لتحليل القوائم |
-| 📚 ملاحظات المشروع | رؤية المنتج + ملاحظات Codex SDK داخل `docs/` |
+| 🔁 استمرارية الجلسة | استئناف آخر جلسة، أو استخدام معرف جلسة صريح، أو ملفات جلسات ثابتة |
+| 📤 التعامل مع المخرجات | بث أحداث JSONL وتصدير الرسالة النهائية |
+| 🧩 تخطيط منظم | إخراج تقسيم المهمة بقيود مخطط JSON |
+| 🛠️ نقطة دخول مزدوجة | تنفيذات Bash و TypeScript |
+| 📚 سياق مدمج | إرشادات المشروع موجودة في `docs/` |
 
-## الميزات
+### 🧩 الميزات
 
-- تنفيذ Codex مدرك للجلسة:
+- تنفيذ Codex المدرك للجلسة:
   - `--resume-last`
   - `--session <id>`
   - `--session-file <path>`
   - `--session-mode auto|new|resume`
-- التحكم في المخرجات:
-  - `--json` تمرير مباشر لتدفق الأحداث
+- التحكم بالمخرجات:
+  - `--json` تمرير تدفق الأحداث
   - `--output-last-message <path>`
   - `--prompt <text>` بادئة موجه مخصصة
-- سكربت مخطِّط المهام مع فرض المخطط:
+- سكربت مخطط خطة المهمة مع فرض المخطط:
   - `--task` أو `--file`
-  - `--schema` لتجاوز المسار الافتراضي
-  - `--out` ملف المخرجات
-- نقاط دخول Shell وTypeScript لتحليل القوائم.
+  - `--schema` لتجاوز
+  - `--out` ملف الإخراج
+- نقطة دخول لكل من الشل و TypeScript لتحليل القائمة.
 
-## بنية المشروع
+## 🧱 هيكلة المشروع
 
 ```text
 .
@@ -68,54 +82,49 @@
    └─ codex/ (git submodule)
 ```
 
-## سلوك الجلسة
+## ✅ المتطلبات الأساسية
 
-يبدأ `codex exec` جلسة جديدة غير تفاعلية ما لم تقم باستئناف جلسة صراحةً. لمتابعة جلسة سابقة، استخدم `codex exec resume --last` أو `codex exec resume <SESSION_ID>`. يمكنك العثور على معرّفات الجلسات عبر أداة الاختيار التفاعلية `codex resume`، أو الأمر `/status` داخل الجلسة، أو داخل `~/.codex/sessions/`.
-
-تدعم هذه السكربتات أيضًا `--session-file <path>` لحفظ معرّف الجلسة. في التشغيل الأول تبدأ جلسة جديدة، وتحفظ المعرّف، ثم تعيد استخدامه في التشغيلات اللاحقة.
-
-يمكنك التحكم في سلوك الجلسة باستخدام `--session-mode`:
-- `auto` (الافتراضي): يستأنف إذا وُجد ملف جلسة، وإلا يبدأ جلسة جديدة
-- `new`: يبدأ دائمًا جلسة جديدة (ويستبدل ملف الجلسة إذا تم تمريره)
-- `resume`: يتطلب جلسة موجودة مسبقًا (من `--session-file` أو `--session` أو `--resume-last`)
-
-## المتطلبات المسبقة
-
-| المتطلب | سبب الحاجة إليه |
+| المتطلب | لماذا هو مطلوب |
 |---|---|
-| `codex` CLI في `PATH` | مطلوب بواسطة جميع السكربتات المساعدة |
-| سياق مستودع Git (أو `--skip-git-check`) | السكربتات تمنع التشغيل غير المقصود خارج المستودع |
-| `python3` (أو `python`) لملف `scripts/codex_analyze_ls.sh` | مطلوب لتحليل JSON عند تهيئة/التقاط مخرجات الجلسة |
-| Node.js 18+ لملف `scripts/codex_analyze_ls.ts` | بيئة التشغيل الموصى بها لنقطة دخول TypeScript |
+| `codex` CLI موجود في `PATH` | مطلوب لجميع سكربتات المساعدة |
+| سياق مستودع Git (أو `--skip-git-check`) | تمنع السكربتات التشغيل غير المقصود خارج مستودع |
+| `python3` (أو `python`) لـ `scripts/codex_analyze_ls.sh` | مطلوب لتحليل JSON عند تهيئة أو حفظ مخرجات الجلسة |
+| Node.js 18+ لـ `scripts/codex_analyze_ls.ts` | بيئة تشغيل نقطة الدخول المكتوبة بـ TypeScript |
 
-## التثبيت
+## 🔧 التثبيت
 
-1. استنسخ المستودع.
-2. ثبّت اعتماديات Node:
+1. استنساخ المستودع.
 
-```bash
-npm install
-```
+   ```bash
+   git clone <repository-url>
+   cd LazyingArtAgent
+   ```
 
-3. تأكد أن `codex` CLI مثبت ومتاح:
+2. تثبيت تبعيات Node.
 
-```bash
-codex --help
-```
+   ```bash
+   npm install
+   ```
 
-4. اختياري: هيّئ الوحدات الفرعية إذا أردت وصولًا محليًا إلى `vendor/codex`:
+3. التحقق من توفر واجهة سطر أوامر Codex.
 
-```bash
-git submodule update --init --recursive
-```
+   ```bash
+   codex --help
+   ```
 
-ملاحظة: يعرّف `.gitmodules` المسار `vendor/codex`، لكنه قد يكون غير مهيأ في بعض النسخ.
+4. (اختياري) تهيئة الوحدات الفرعية إذا كنت تحتاج `vendor/codex` محليًا.
 
-## الاستخدام
+   ```bash
+   git submodule update --init --recursive
+   ```
 
-### سكربت Shell: تحليل `ls -la`
+الافتراض: `<repository-url>` هو عنوان Git البعيد الفعلي؛ حدّثه برابط المصدر الحقيقي الخاص بك.
 
-شغّل:
+## 🛠️ الاستخدام
+
+### سكربت الشل: تحليل `ls -la`
+
+نفّذ:
 
 ```bash
 scripts/codex_analyze_ls.sh --skip-git-check
@@ -134,9 +143,9 @@ scripts/codex_analyze_ls.sh --output-last-message out.txt
 scripts/codex_analyze_ls.sh --prompt "Summarize the listing"
 ```
 
-### سكربت تقسيم المهام
+### 🧭 سكربت تقسيم المهمة
 
-قسّم مهمة كبيرة إلى خطوات صغيرة قابلة للتحقق وأخرج النتيجة بصيغة JSON:
+قسّم مهمة كبيرة إلى خطوات صغيرة قابلة للتحقق وأخرج JSON:
 
 ```bash
 scripts/codex_task_breakdown.sh --task "Build a login screen" --skip-git-check
@@ -148,15 +157,15 @@ scripts/codex_task_breakdown.sh --task "Build a login screen" --skip-git-check
 scripts/codex_task_breakdown.sh --file docs/task.txt --out outputs/plan.json --skip-git-check
 ```
 
-تحقق باستخدام مسار مخطط مخصص:
+التحقق باستخدام مخطط مخصص:
 
 ```bash
 scripts/codex_task_breakdown.sh --task "Refactor auth flow" --schema schemas/task_breakdown.schema.json --skip-git-check
 ```
 
-### سكربت Node TypeScript: تحليل `ls -la`
+### ⚙️ سكربت Node TypeScript: تحليل `ls -la`
 
-شغّل (باستخدام `tsx`):
+نفّذ (باستخدام `tsx`):
 
 ```bash
 npx tsx scripts/codex_analyze_ls.ts --skip-git-check
@@ -175,58 +184,69 @@ npx tsx scripts/codex_analyze_ls.ts --output-last-message out.txt
 npx tsx scripts/codex_analyze_ls.ts --prompt "Summarize the listing"
 ```
 
-## الإعداد
+## 🔁 سلوك الجلسة
+
+`codex exec` يبدأ جلسة غير تفاعلية جديدة ما لم تستأنف جلسة صريحة. للاستمرار في جلسة سابقة، استخدم `codex exec resume --last` أو `codex exec resume <SESSION_ID>`. يمكنك العثور على معرفات الجلسات عبر أداة الاختيار التفاعلية `codex resume`، أو أمر `/status` داخل الجلسة، أو من داخل `~/.codex/sessions/`.
+
+تدعم هذه السكربتات أيضًا `--session-file <path>` للحفاظ على معرف الجلسة. في أول تشغيل، تبدأ جلسة جديدة، وتخزن المعرف، ثم تعيد استخدامه في التشغيلات اللاحقة.
+
+يمكنك التحكم بسلوك الجلسة باستخدام `--session-mode`:
+- `auto` (افتراضي): استئناف إذا وجد ملف جلسة، وإلا بدء جلسة جديدة
+- `new`: بدء جلسة جديدة دائمًا (ويحل محل ملف الجلسة إذا تم تمريره)
+- `resume`: يتطلب وجود جلسة سابقة (`--session-file` أو `--session` أو `--resume-last`)
+
+## 🧭 الإعداد
 
 ### `scripts/codex_analyze_ls.sh` و `scripts/codex_analyze_ls.ts`
 
 | الخيار | الوصف |
 |---|---|
-| `--resume-last` | استئناف أحدث جلسة exec |
-| `--session <id>` | استئناف جلسة exec محددة |
-| `--session-file <path>` | حفظ معرّف الجلسة وإعادة استخدامه |
+| `--resume-last` | استئناف آخر جلسة تنفيذ |
+| `--session <id>` | استئناف جلسة تنفيذ محددة |
+| `--session-file <path>` | حفظ وإعادة استخدام معرف جلسة |
 | `--session-mode <auto|new|resume>` | استراتيجية جلسة صريحة |
-| `--skip-git-check` | تجاوز التحقق من مستودع Git |
+| `--skip-git-check` | تجاوز التحقق من وجود مستودع Git |
 | `--json` | إخراج أحداث JSONL |
-| `--output-last-message <path>` | كتابة الرسالة النهائية للمساعد |
-| `--prompt <text>` | بادئة موجه مخصصة قبل القائمة الملحقة |
+| `--output-last-message <path>` | كتابة الرسالة الختامية للمساعد |
+| `--prompt <text>` | بادئة موجه مخصصة قبل القائمة المضمّنة |
 
-قواعد القيود المفروضة بواسطة سكربتي التحليل:
-- `--resume-last` و `--session` خياران متنافيان.
+قواعد القيود المطبقة على كلا سكربتي التحليل:
+- `--resume-last` و `--session` متعارضان.
 - لا يمكن دمج `--session-file` مع `--resume-last` أو `--session`.
 - لا يمكن دمج `--session-mode new` مع أعلام الاستئناف الصريحة.
-- يتطلب `--session-mode resume` أحد: `--session-file` أو `--session` أو `--resume-last`.
+- `--session-mode resume` يتطلب وجود `--session-file` أو `--session` أو `--resume-last`.
 
 ### `scripts/codex_task_breakdown.sh`
 
 | الخيار | الوصف |
 |---|---|
-| `--task <text>` | مهمة مضمّنة مباشرة |
+| `--task <text>` | مهمة مدمجة |
 | `--file <path>` | نص المهمة من ملف |
-| `--schema <path>` | ملف المخطط (الافتراضي: `schemas/task_breakdown.schema.json`) |
+| `--schema <path>` | ملف المخطط (افتراضي: `schemas/task_breakdown.schema.json`) |
 | `--out <path>` | كتابة JSON النهائي إلى ملف |
-| `--skip-git-check` | تجاوز التحقق من مستودع Git |
+| `--skip-git-check` | تجاوز التحقق من وجود مستودع Git |
 
 شكل المخطط (`schemas/task_breakdown.schema.json`):
-- مطلوب على المستوى الأعلى: `task_summary`, `assumptions`, `steps`, `risks`, `out_of_scope`
-- مطلوب لكل خطوة: `id`, `title`, `goal`, `verification`, `validation`
+- متطلبات المستوى الأعلى: `task_summary`, `assumptions`, `steps`, `risks`, `out_of_scope`
+- المتطلبات لكل خطوة: `id`, `title`, `goal`, `verification`, `validation`
 - اختياري لكل خطوة: `depends_on`
 
-## أمثلة
+## 📎 أمثلة
 
-### حفظ جلسة وإعادة استخدامها عبر التشغيلات
+### الاحتفاظ واستعادة جلسة عبر تنفيذات متعددة
 
 ```bash
 scripts/codex_analyze_ls.sh --session-file .codex_session --skip-git-check
 scripts/codex_analyze_ls.sh --session-file .codex_session --skip-git-check
 ```
 
-### حفظ الرسالة النهائية للمساعد فقط
+### حفظ الرسالة النهائية فقط
 
 ```bash
 scripts/codex_analyze_ls.sh --output-last-message outputs/last.txt --skip-git-check
 ```
 
-### إنشاء ملف JSON لخطة مهمة
+### إنشاء مخطط خطة مهمة كـ JSON
 
 ```bash
 scripts/codex_task_breakdown.sh \
@@ -235,48 +255,55 @@ scripts/codex_task_breakdown.sh \
   --skip-git-check
 ```
 
-## المستندات
+## 📚 المستندات
 
-- `docs/idea.md`: رؤية المنتج لمساعد تطوير التطبيقات المعتمد على Codex
+- `docs/idea.md`: رؤية المنتج لوكيل تطوير التطبيقات بدعم من Codex
 - `docs/codex-sdk.md`: ملاحظات تثبيت واستخدام Codex SDK
 
-## ملاحظات التطوير
+## 🧪 ملاحظات التطوير
 
-- كلا سكربتي التحليل يرسلان الموجه إلى `codex` عبر stdin (`-`) لتجنب مشكلات اقتباس الصدفة.
-- كلا السكربتين يطبعان `Session ID: ...` إلى stderr كي لا يتداخل ذلك مع stdout.
-- يستخدم سكربت Shell `python3` (أو `python`) لتحليل JSONL عند تهيئة ملف جلسة.
-- للتحكم البرمجي الأعمق (الخيوط وسير العمل القابل للاستئناف)، فكّر في Codex SDK وخزّن معرّف الخيط بين التشغيلات.
-- التوثيق يستخدم `npx tsx ...` لتشغيل سكربت TypeScript؛ الحزمة `tsx` غير مصرّح بها حاليًا في `package.json` (ثبّتها عالميًا أو شغّلها عبر `npx`).
+- كلا سكربتي التحليل يرسلان موجه Codex إلى `codex` عبر stdin (`-`) لتجنب مشاكل تقييد الاقتباس في الشل.
+- يطبع كلا السكربتين `Session ID: ...` إلى `stderr` حتى لا يتداخل مع `stdout` القابل للتحليل.
+- يستخدم سكربت الشل `python3` (أو `python`) لتحليل JSONL عند تهيئة أو حفظ حالة الجلسة.
+- للتحكم البرمجي الأعمق (استمرارية الخيوط، سير استئناف الجلسة)، يُفضَّل مراجعة ملاحظات Codex SDK في `docs/codex-sdk.md`.
+- تم توثيق `npx tsx ...` لتشغيل سكربت TypeScript؛ لا يزال `tsx` غير معرف كتبع مباشر في `package.json`.
 
-## استكشاف الأخطاء وإصلاحها
+## 🧯 استكشاف الأخطاء وإصلاحها
 
-| العرَض | السبب المرجّح | الحل |
+| العَرَض | السبب المحتمل | الحل |
 |---|---|---|
-| `codex CLI not found in PATH` | Codex CLI غير مثبت أو غير قابل للاكتشاف | ثبّت Codex CLI وتحقق عبر `codex --help`. |
-| `Not inside a Git repo` | حماية السكربت منعت التنفيذ | شغّل داخل مستودع أو مرّر `--skip-git-check`. |
-| `Session file is empty or missing` مع `--session-mode resume` | وضع الاستئناف يتطلب مصدر معرّف موجود مسبقًا | أنشئ/هيّئ ملف الجلسة أولًا (مثلًا عبر `--session-mode auto` أو `--session-mode new`). |
-| `python3 or python is required` (مسار سكربت Shell) | Python مفقود لتحليل JSONL | ثبّت Python ثم أعد المحاولة. |
-| مشكلات `npx tsx` | اعتماد بيئة التشغيل غير متاح محليًا | استخدم `npx tsx ...` مباشرة، أو أضف `tsx` كاعتماد تطوير محلي. |
+| `codex CLI not found in PATH` | أداة `codex` غير مثبتة أو غير قابلة للاكتشاف | ثبّت Codex CLI وتحقق عبر `codex --help`. |
+| `Not inside a Git repo` | الحارس في السكربت منع التشغيل | شغّل داخل مستودع أو استخدم `--skip-git-check`. |
+| `Session file is empty or missing` مع `--session-mode resume` | وضع الاستئناف يتطلب مصدر معرف جلسة موجود | أنشئ/اغرس ملف الجلسة أولًا (مثلًا عبر `--session-mode auto` أو `--session-mode new`). |
+| `python3 or python is required` | مسار سكربت الشل يعتمد على تحليل Python | ثبّت Python ثم أعد المحاولة. |
+| مشاكل `npx tsx` | تبعية زمن التشغيل غير متوفرة محليًا | نفّذ `npx tsx ...` مباشرة، أو أضف `tsx` كتبع تطوير محليًا. |
 
-## خارطة الطريق
+## 🗺️ خارطة الطريق
 
-- إضافة ملفات README متعددة اللغات مُولّدة تحت `i18n/` مع إبقاء شريط اللغات متزامنًا.
-- إضافة أسماء مختصرة لأوامر npm للتدفقات الشائعة (`analyze:sh`, `analyze:ts`, `plan:task`).
-- إضافة فحوصات CI خفيفة لتدقيق سكربتات shell وأمثلة التحقق من المخطط.
-- توسيع أمثلة مخطط المهام بقوالب واقعية داخل `docs/`.
+- إضافة ملفات README متعددة اللغات داخل `i18n/` ومزامنة روابط اللغة.
+- إضافة أسماء مستعارة لـ npm للتدفقات الشائعة (`analyze:sh`, `analyze:ts`, `plan:task`).
+- إضافة فحوص CI خفيفة للتحقق من جودة سكربتات الشل وصحة المخطط.
+- توسيع أمثلة مخطط المهمة بقوالب تطبيقية من `docs/`.
 
-## المساهمة
+## 🤝 المساهمة
 
-المساهمات مرحّب بها.
+المساهمات مرحب بها.
 
 سير العمل المقترح:
-1. أنشئ فرع ميزة.
-2. حافظ على تركيز التغييرات ودقتها بالنسبة للمستودع.
-3. حدّث المستندات/الأمثلة عند تغيّر سلوك CLI.
-4. افتح طلب سحب يصف تغيّرات السلوك وخطوات التحقق.
+1. إنشاء فرع ميزة.
+2. إبقاء التغييرات مركزة ومتوافقة مع المستودع.
+3. تحديث الأمثلة/المستندات عند تغيّر سلوك CLI.
+4. فتح طلب سحب يصف تغييرات السلوك وخطوات التحقق.
 
 ## الترخيص
 
-تُصرّح بيانات الحزمة بترخيص `ISC` في `package.json`.
+بيانات الحزمة تعلن أن الترخيص هو `ISC` في `package.json`.
 
-ملاحظة: لم يكن ملف `LICENSE` مستقلًا موجودًا في هذه النسخة عند وقت الكتابة.
+ملاحظة: لم يكن ملف `LICENSE` المستقل موجودًا في هذه النسخة عند وقت الكتابة.
+
+
+## ❤️ Support
+
+| Donate | PayPal | Stripe |
+| --- | --- | --- |
+| [![Donate](https://camo.githubusercontent.com/24a4914f0b42c6f435f9e101621f1e52535b02c225764b2f6cc99416926004b7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f446f6e6174652d4c617a79696e674172742d3045413545393f7374796c653d666f722d7468652d6261646765266c6f676f3d6b6f2d6669266c6f676f436f6c6f723d7768697465)](https://chat.lazying.art/donate) | [![PayPal](https://camo.githubusercontent.com/d0f57e8b016517a4b06961b24d0ca87d62fdba16e18bbdb6aba28e978dc0ea21/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f50617950616c2d526f6e677a686f754368656e2d3030343537433f7374796c653d666f722d7468652d6261646765266c6f676f3d70617970616c266c6f676f436f6c6f723d7768697465)](https://paypal.me/RongzhouChen) | [![Stripe](https://camo.githubusercontent.com/1152dfe04b6943afe3a8d2953676749603fb9f95e24088c92c97a01a897b4942/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5374726970652d446f6e6174652d3633354246463f7374796c653d666f722d7468652d6261646765266c6f676f3d737472697065266c6f676f436f6c6f723d7768697465)](https://buy.stripe.com/aFadR8gIaflgfQV6T4fw400) |
